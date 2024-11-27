@@ -72,7 +72,7 @@ exports.getProvidersToAvoid = (providerHistory, invoices, totalBalance) => {
 
   // Cross-reference with invoices due this month
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+  const currentMonth = currentDate.getMonth() + 1;
 
   const dueProviders = invoices
     .filter(
@@ -86,12 +86,13 @@ exports.getProvidersToAvoid = (providerHistory, invoices, totalBalance) => {
       (invoice) => invoice.ProviderID === provider.ProviderID
     );
 
+    // Use a fixed threeMonthsAgo calculation
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
     // Check if the provider hasn't been hired in the last 3 months
     const hasRecentInvoices = relatedInvoices.some((invoice) => {
       const invoiceDate = new Date(invoice.DueDate);
-      const threeMonthsAgo = new Date(
-        currentDate.setMonth(currentDate.getMonth() - 3)
-      );
       return invoiceDate >= threeMonthsAgo;
     });
 

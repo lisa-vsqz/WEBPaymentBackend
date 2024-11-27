@@ -35,8 +35,10 @@ const Invoice = sequelize.define(
       defaultValue: 0,
     },
     AmountDue: {
-      type: DataTypes.DECIMAL(15, 2),
-      defaultValue: 0,
+      type: DataTypes.VIRTUAL, // Virtual column
+      get() {
+        return this.TotalAmount - this.AmountPaid;
+      },
     },
     PaymentStatus: {
       type: DataTypes.STRING,
