@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+const { Sequelize } = require("sequelize");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -10,10 +10,10 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 1433,
-    dialect: 'mssql',
+    dialect: "mssql",
     dialectOptions: {
       options: {
-        trustServerCertificate: true, 
+        trustServerCertificate: true,
       },
     },
     pool: {
@@ -22,7 +22,8 @@ const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    logging: false, 
+    logging: false,
+    //logging: console.log, // Enable SQL query logging
   }
 );
 

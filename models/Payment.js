@@ -1,57 +1,66 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const BankAccount = require('./BankAccount');
-const Provider = require('./Provider');
-const Invoice = require('./Invoice');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+const BankAccount = require("./BankAccount");
+const Provider = require("./Provider");
+const Invoice = require("./Invoice");
 
-const Payment = sequelize.define('Payment', {
-  PaymentID: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  BankAccountID: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: BankAccount,
-      key: 'BankAccountID',
+const Payment = sequelize.define(
+  "Payment",
+  {
+    PaymentID: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    allowNull: false,
-  },
-  PaymentDate: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  AmountPaid: {
-    type: DataTypes.DECIMAL(15, 2),
-    allowNull: false,
-  },
-  ProviderID: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Provider,
-      key: 'ProviderID',
+    BankAccountID: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: BankAccount,
+        key: "BankAccountID",
+      },
+      allowNull: false,
     },
-    allowNull: false,
-  },
-  InvoiceID: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Invoice,
-      key: 'InvoiceID',
+    PaymentDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      get() {
+        // Ensure the date is returned as 'YYYY-MM-DD'
+        const rawValue = this.getDataValue("PaymentDate");
+        return rawValue ? rawValue.toISOString().split("T")[0] : null;
+      },
     },
-    allowNull: false,
+    AmountPaid: {
+      type: DataTypes.DECIMAL(15, 2),
+      allowNull: false,
+    },
+    ProviderID: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Provider,
+        key: "ProviderID",
+      },
+      allowNull: false,
+    },
+    InvoiceID: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Invoice,
+        key: "InvoiceID",
+      },
+      allowNull: false,
+    },
+    PaymentNotification: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    CreatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
-  PaymentNotification: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-}, {
-  timestamps: false,
-});
+  {
+    timestamps: false,
+  }
+);
 
 module.exports = Payment;
