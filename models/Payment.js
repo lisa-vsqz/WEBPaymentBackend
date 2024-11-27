@@ -23,11 +23,6 @@ const Payment = sequelize.define(
     PaymentDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      get() {
-        // Ensure the date is returned as 'YYYY-MM-DD'
-        const rawValue = this.getDataValue("PaymentDate");
-        return rawValue ? rawValue.toISOString().split("T")[0] : null;
-      },
     },
     AmountPaid: {
       type: DataTypes.DECIMAL(15, 2),
